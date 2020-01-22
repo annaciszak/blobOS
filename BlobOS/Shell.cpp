@@ -306,13 +306,15 @@ show
 	-pcb [PROC NAME] [FILENAME] [PARENT PID]  display information about the process with this PID
 	-pcblist	display the contents of WAITING and RUNNING list
 	-pagetable [PROC PID]	display the contents of page table
-	-frame [NO FRAME]	display the content of frame
+	-frame [FRAME]	display the content of frame
 	-pages [PROC PID]	display the content of pages
 	-tree		print the tree of processes
 	-ram		display the contents of RAM
 	-queue		display the contents of FIFO queue
 	-pagefile	display the contents of page file
 	-lock		display the contents of lock queue
+	-catalogue	display the contents of catalogue
+	-block [BLOCK]	display the contents of block
 
 cp [PROC NAME] [FILENAME] [PARENT PID] - create process 
 
@@ -447,6 +449,8 @@ void Shell::show() {
 	else if (parsed[1] == "-frame") showframe();
 	else if (parsed[1] == "-disc") showdisc();
 	else if (parsed[1] == "-lock")showlock();
+	else if (parsed[1] == "-block")showblock();
+	else if (parsed[1] == "-catalogue")showcatalogue();
 	else {
 			std::string exc = "error: unsupported option";
 			throw exc;
@@ -611,6 +615,43 @@ void Shell::showdisc() {
 	if (parsed.size() == 2) {
 		set_color(white);
 		FM.show_disc();
+	}
+	else {
+		std::string exc = parsed[0] + " " + parsed[1] + ": " + "extra operand \'" + parsed[2] + "\'";
+		throw exc;
+	}
+}
+
+void Shell::showblock() {
+	set_color(white);
+	if (parsed.size() == 3) {
+		try {
+			int block = std::stoi(parsed[2]);
+			if (block > -1 && block < 32) {
+				FM.show_block(block);
+			}
+			else {
+				std::cout << "Block does not exist" << std::endl;
+			}
+		}
+		catch (const std::invalid_argument & a) {
+			std::cout << "Could not convert arg to NUMBER" << std::endl;
+		}
+	}
+	else if (parsed.size() == 2) {
+		std::string  exc = parsed[0] + ": " + "missing operand";
+		throw exc;
+	}
+	else {
+		std::string exc = parsed[0] + " " + parsed[1] + ": " + "extra operand \'" + parsed[3] + "\'";
+		throw exc;
+	}
+}
+
+void Shell::showcatalogue() {
+	set_color(white);
+	if (parsed.size() == 2) {
+		FM.show_cataloge();
 	}
 	else {
 		std::string exc = parsed[0] + " " + parsed[1] + ": " + "extra operand \'" + parsed[2] + "\'";

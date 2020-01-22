@@ -1,8 +1,8 @@
 MV A 2;
-MV B 4;
+MV B 8;
 MV C 3;
-ML A A;
-ML B C;
+ML B B;
+ML A C;
 ML B 4;
 SB A B;
 MF (wynik.txt);

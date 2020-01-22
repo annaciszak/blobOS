@@ -27,7 +27,8 @@ void FileManager::create_file(string name) {
 		pair<string, inode> file(name, file_node); //Tworzy ,,plik"
 
 		cataloge.push_back(file); //Dodaje plik do katalogu
-		cout << "File "<<name<< " created" << endl;
+		std::cout << "File " << name << " created" << std::endl;
+
 	}
 	else cout << "File exists" << endl;
 }
@@ -115,7 +116,7 @@ void FileManager::clean_file_data(string name) {
 //Pokazuje dysk
 void FileManager::show_disc() {
 	for (int j = 0; j < 32; j++) {
-		cout << j << "(" << disc[j].free << "): ";
+		cout << j << ": ";
 		for (auto e : disc[j].block) {
 			cout << "[" << e << "] ";
 		}
@@ -295,9 +296,12 @@ void FileManager::save_data_to_file(string name, string text) {
 void FileManager::edit_file(string name, string text) {
 	int pom = find_file(name);
 
-	if (pom != -1 && cataloge[pom].second.mutex.get_owner_id() == planist.ReadyPCB[0]->pid) {
+	if (pom != -1){
+		if (cataloge[pom].second.mutex.get_owner_id() == planist.ReadyPCB[0]->pid) {
 			save_data_to_file(name, text);
+		}
 	}
+	else cout << "File does not exist" << endl;
 }
 
 //Sprawdza zamek dla edytora i zapisuje dane do pliku
@@ -309,6 +313,7 @@ void FileManager::edit_file_editor(string name, string text) {
 			save_data_to_file(name, text);
 		}
 	}
+	else cout << "File does not exist" << endl;
 }
 
 
@@ -436,7 +441,7 @@ void FileManager::delete_file(string name) {
 		//Czy�ci dane pliku i usuwa go z katalogu
 		clean_file_data(name);
 		cataloge.erase(cataloge.begin() + pom);
-		cout << "File " << name << " deleted" << endl;
+		std::cout << "File " << name << " deleted" << std::endl;
 	}
 }
 
@@ -461,6 +466,7 @@ void FileManager::close_file(string name) {
 		//Odblokowuje zamek
 		cataloge[pom].second.mutex.unlock(planist.ReadyPCB[0]);
 	}
+
 	else cout << "File does not exist" << endl;
 }
 
@@ -483,4 +489,25 @@ void FileManager::file_info(string name) {
 		cout << endl;
 	}
 	else cout << "File does not exist" << endl;
+}
+
+//Pokazuje wpisy katalowgowe
+void FileManager::show_cataloge() {
+	if (cataloge.size() > 0) {
+		cout << "File list:" << endl;
+		for (int i = 0; i < cataloge.size(); i++) {
+			cout << "- " << cataloge[i].first << endl;
+		}
+	}
+	else cout << "There is no file in cataloge" << endl;
+
+}
+
+//Pokazuje zawartość bloku pamięci
+void FileManager::show_block(int nr) {
+	cout << "Content of block " << nr << ": " << endl;
+	for (auto e : disc[nr].block) {
+		cout << "|" << e << "| ";
+	}
+	cout << endl;
 }

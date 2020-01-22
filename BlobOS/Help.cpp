@@ -29,6 +29,8 @@ Show the information about OPTION.
 	-queue		display the contents of FIFO queue
 	-pagefile	display the contents of page file
 	-lock		display the contents of lock queue
+	-catalogue	display the contents of catalogue
+	-block [BLOCK]	display the contents of block
 
 Example:
 	show -pcb p1 file1 1	Information about the process p1. 

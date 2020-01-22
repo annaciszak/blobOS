@@ -63,6 +63,8 @@ protected:
 	void showlock();
 	void editor(std::string filename);
 	void write();
+	void showblock();
+	void showcatalogue();
 
 	//interpreter
 	void go();
