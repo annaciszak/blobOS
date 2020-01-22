@@ -477,20 +477,59 @@ void ProcTree::kill_name(string name) { // zabicie procesu po name
 
 }
 
-void ProcTree::show_vector_child(shared_ptr<PCB> proc_show) {
-	std::string tab = "   ";
+int recu_level = 1;
+
+void ProcTree::show_vector_child(shared_ptr<PCB> proc_show, bool end) {
+	std::string tab = "	 ";
+	int char_a = 192;
+	int char_b = 196;
+	int char_c = 195;
+	int pion = 179;
+	char char_a_s = char_a;
+	char char_b_s = char_b;
+	char char_c_s = char_c;
+	char pion_d = pion;
 	for (int i = 0; i < proc_show->children_vector.size(); i++) {
-	
-		cout <<tab<<proc_show->children_vector[i]->name << " - "<< proc_show->children_vector[i]->pid << " parent - " << proc_show->children_vector[i]->parent_pid << endl;
-		ProcTree::show_vector_child(proc_show->children_vector[i]);
+
+		for (int i = 0; i < recu_level; i++) {
+			cout << tab;
+
+			if (i == recu_level - 2 && end == true) {
+
+			}
+			else if (i < recu_level - 1) {
+				cout << pion_d;
+			}
+
+		}
+
+		if (i == proc_show->children_vector.size() - 1) {
+			cout << char_a_s << char_b_s << char_b_s;
+			end = 1;
+		}
+		else {
+			cout << char_c_s << char_b_s << char_b_s;
+
+		}
+
+		cout << proc_show->children_vector[i]->name << " - " << proc_show->children_vector[i]->pid << " parent - " << proc_show->children_vector[i]->parent_pid << endl;
+
+		recu_level++;
+		ProcTree::show_vector_child(proc_show->children_vector[i], end);
+		//recu_level--;
 	}
+	recu_level--;
+
 }
 
 void ProcTree::display_tree()
 {
-	cout << this->init_proc->name << " - "<< this->init_proc->pid << endl;
+	int char_end_int = 191;
+	char char_end = char_end_int;
+	cout << this->init_proc->name << " - " << this->init_proc->pid << " " << char_end << endl;
 
-	ProcTree::show_vector_child(this->init_proc);
+	ProcTree::show_vector_child(this->init_proc, 0);
+	recu_level = 1;
 
-    // sposób wyświetlania drzewa do ugadania z Anią :) 
+	// sposób wyświetlania drzewa do ugadania z Anią :) 
 }

@@ -95,7 +95,7 @@ public:
 
 
 
-	void show_vector_child(shared_ptr<PCB> proc_show);
+	void show_vector_child(shared_ptr<PCB> proc_show, bool end);
 
     void kill_pid(int pid); // zabicie procesu po PID
     void kill_name(string name); // zabicie procesu po nazwie
