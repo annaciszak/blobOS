@@ -9,53 +9,72 @@ mutex::mutex()
 void mutex::lock(std::shared_ptr<PCB>process)
 {
 	set_color(white);
-	if (process->pid == OWNER_ID && LOCKED)
+	if (WAITING_PCB.empty())
 	{
-		std::cout << "The process already is the owner, processing.\n";
-	}
-	else
-	{
-		if (process->pid != OWNER_ID && LOCKED)
+		if (process->pid != 0)//utworzono proces i otwarto z niego zamek przy pustej kolejce
 		{
-			std::cout << "lock: " << process->name << ": file locked by: " << WAITING_PCB.front()->name << ", calling planist.\n";
-			//dodaje oczekujacy proces do kolejki zamka
-			WAITING_PCB.push_back(process);
-			wait(process);
-		}
-		else if(process->pid != OWNER_ID && !LOCKED)
-		{
-			if (WAITING_PCB.front()->name == "init")//usuwanie inita z poczatku kolejki
-			{
-				WAITING_PCB.pop_front();
-			}
-			//ustawia ID procesu-wlasciciela
+			//dodaj
 			OWNER_ID = process->pid;
-			//zamyka zamek
 			LOCKED = true;
 			WAITING_PCB.push_back(process);
 			std::cout << "lock: " << process->name << ": file has been locked.\n";
 		}
-		else //if(process->pid == OWNER_ID && !LOCKED)//if do wywalki
+		else//dodaj init
 		{
-			if(WAITING_PCB.empty())//start systemu
-			{
-				PCB init;
-				std::shared_ptr<PCB>init_ptr = make_shared<PCB>(init);
-				WAITING_PCB.push_back(init_ptr);
-				std::cout << "lock(): lock's queue is empty, adding init.\n";
-			}
-			else
-			{
-				if (WAITING_PCB.front()->name != "init")
-				{
-					LOCKED = true;
-					std::cout << "lock(): " << process->name << ": file has been locked.\n";
-				}
-			}
-			
+			OWNER_ID = process->pid;
+			WAITING_PCB.push_back(process);
+			std::cout << "lock: " << process->name << ": file has been locked.\n";
 		}
 	}
-	
+	else
+	{
+		if (process->pid == OWNER_ID && LOCKED)
+		{
+			std::cout << "The process already is the owner, processing.\n";
+		}
+		else
+		{
+			if (process->pid != OWNER_ID && LOCKED)
+			{
+				std::cout << "lock: " << process->name << ": file locked by: " << WAITING_PCB.front()->name << ", calling planist.\n";
+				//dodaje oczekujacy proces do kolejki zamka
+				WAITING_PCB.push_back(process);
+				wait(process);
+			}
+			else if (process->pid != OWNER_ID && !LOCKED)
+			{
+				if (WAITING_PCB.front()->name == "init")//usuwanie inita z poczatku kolejki
+				{
+					WAITING_PCB.pop_front();
+				}
+				//ustawia ID procesu-wlasciciela
+				OWNER_ID = process->pid;
+				//zamyka zamek
+				LOCKED = true;
+				WAITING_PCB.push_back(process);
+				std::cout << "lock: " << process->name << ": file has been locked.\n";
+			}
+			else //if(process->pid == OWNER_ID && !LOCKED)//if do wywalki
+			{
+				if (WAITING_PCB.empty())//start systemu
+				{
+					PCB init;
+					std::shared_ptr<PCB>init_ptr = make_shared<PCB>(init);
+					WAITING_PCB.push_back(init_ptr);
+					std::cout << "lock(): lock's queue is empty, adding init.\n";
+				}
+				else
+				{
+					if (WAITING_PCB.front()->name != "init")
+					{
+						LOCKED = true;
+						std::cout << "lock(): " << process->name << ": file has been locked.\n";
+					}
+				}
+
+			}
+		}
+	}
 }
 
 void mutex::unlock(std::shared_ptr<PCB>process)
