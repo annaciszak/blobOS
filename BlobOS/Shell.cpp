@@ -313,6 +313,7 @@ show
 	-queue		display the contents of FIFO queue
 	-pagefile	display the contents of page file
 	-lock		display the contents of lock queue
+	-disc		display the contents of disc
 	-catalogue	display the contents of catalogue
 	-block [BLOCK]	display the contents of block
 
