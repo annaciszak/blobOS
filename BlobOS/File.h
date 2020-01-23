@@ -14,11 +14,11 @@ struct  disc_area
 {
 	bool free;
 	vector<char> block;
-
+	bool index;
 
 	disc_area() {
 		free = 0;
-	
+		index = 0;
 	}
 
 };

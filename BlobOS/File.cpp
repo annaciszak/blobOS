@@ -66,9 +66,11 @@ void FileManager::clean_file_data(string name) {
 				//Czy�ci dane zapisane w bloku pami�ci
 				disc[cataloge[pom].second.number[0]].block.clear();
 				disc[cataloge[pom].second.number[0]].free = 0;
+				disc[cataloge[pom].second.number[0]].index= 0;
 				//Usuwa blok pami�ci z i-w�z�a
 				cataloge[pom].second.number.clear();
 				cataloge[pom].second.size_int_byte = 0;
+				
 
 			}
 
@@ -76,8 +78,10 @@ void FileManager::clean_file_data(string name) {
 				//Czy�ci dane zapisane w blokach pami�ci
 				disc[cataloge[pom].second.number[0]].block.clear();
 				disc[cataloge[pom].second.number[0]].free = 0;
+				disc[cataloge[pom].second.number[0]].index = 0;
 				disc[cataloge[pom].second.number[1]].block.clear();
 				disc[cataloge[pom].second.number[1]].free = 0;
+				disc[cataloge[pom].second.number[1]].index = 0;
 				//Usuwa bloki pami�ci z i-w�z�a
 				cataloge[pom].second.number.clear();
 				cataloge[pom].second.size_int_byte = 0;
@@ -87,9 +91,10 @@ void FileManager::clean_file_data(string name) {
 				//Czy�ci dane zapisane w blokach pami�ci
 				disc[cataloge[pom].second.number[0]].free = 0;
 				disc[cataloge[pom].second.number[0]].block.clear();
-
+				disc[cataloge[pom].second.number[0]].index = 0;
 				disc[cataloge[pom].second.number[1]].free = 0;
 				disc[cataloge[pom].second.number[1]].block.clear();
+				disc[cataloge[pom].second.number[1]].index = 0;
 
 
 				int k = 0, len = cataloge[pom].second.number[2];
@@ -99,11 +104,13 @@ void FileManager::clean_file_data(string name) {
 					int help = int(disc[cataloge[pom].second.number[2]].block[k]) - 48;
 					disc[help].block.clear();
 					disc[help].free = 0;
+					disc[help].index = 0;
 					k++;
 				}
 				//Czy�ci blok indeksowy
 				disc[cataloge[pom].second.number[2]].free = 0;
 				disc[cataloge[pom].second.number[2]].block.clear();
+				disc[cataloge[pom].second.number[2]].index = 0;
 				cataloge[pom].second.size_int_byte = 0;
 				//Usuwa bloki pami�ci z i-w�z�a
 				cataloge[pom].second.number.clear();
@@ -118,7 +125,13 @@ void FileManager::show_disc() {
 	for (int j = 0; j < 32; j++) {
 		cout << j << ": ";
 		for (auto e : disc[j].block) {
-			cout << "[" << e << "] ";
+			if (disc[j].index == 1) {
+				if(e>57&&e<68)cout << "[1" <<e-58 << "] ";
+				else if (e > 67 && e < 78)cout << "[2" << e - 68 << "] ";
+				else if (e > 77 && e < 88)cout << "[3" << e - 78 << "] ";
+				else cout << "[" << e << "] ";
+			}
+			else cout << "[" << e << "] ";
 		}
 		cout << endl;
 	}
@@ -229,6 +242,7 @@ void FileManager::save_data_to_file(string name, string text) {
 						//blok indeksowy
 						disc[index].free = 1;
 						cataloge[pom].second.number.push_back(index);
+						disc[index].index = 1;
 
 						cataloge[pom].second.size_int_byte = length;
 						int k = 0, len = length - 64;
@@ -475,14 +489,21 @@ void FileManager::file_info(string name) {
 	int pom = find_file(name);
 	if (pom != -1) {
 		cout << "File name: " << name << endl;
-		cout << "File size: " << cataloge[pom].second.size_int_byte << endl;
+		cout << "File size (in bytes): " << cataloge[pom].second.size_int_byte << endl;
 		cout << "Blocks of disc used by this file: ";
 		int j = cataloge[pom].second.number.size();
 		for (int i = 0; i < j; i++) {
 			cout << "[" << cataloge[pom].second.number[i] << "] ";
 			if (i == 2) {
 				for (auto e: disc[cataloge[pom].second.number[2]].block) {
-					cout << "[" << e << "] ";
+					if (disc[cataloge[pom].second.number[2]].index == 1) {
+							if (e > 57 && e < 68)cout << "[1" << e - 58 << "] ";
+							else if (e > 67 && e < 78)cout << "[2" << e - 68 << "] ";
+							else if (e > 77 && e < 88)cout << "[3" << e - 78 << "] ";
+							else cout << "[" << e << "] ";
+						}
+					else cout << "[" << e << "] ";
+				
 				}
 			}
 		}
