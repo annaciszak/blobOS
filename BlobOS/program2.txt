@@ -3,7 +3,7 @@ MV B 8;
 MV C 3;
 ML B B;
 ML A C;
-ML B 4;
+ML A 4;
 SB A B;
 MF (wynik.txt);
 OF (wynik.txt);
