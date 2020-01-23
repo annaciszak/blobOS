@@ -7,6 +7,7 @@ ML B 4;
 SB A B;
 MF (wynik.txt);
 OF (wynik.txt);
-WF (wynik.txt) A;
+WF (wynik.txt) (wynik: );
+AF (wynik.txt) A;
 CF (wynik.txt);
 HT;
