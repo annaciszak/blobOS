@@ -11,7 +11,8 @@ void mutex::lock(std::shared_ptr<PCB>process)
 	set_color(white);
 	if (WAITING_PCB.empty())
 	{
-		if (process->pid != 0)//utworzono proces i otwarto z niego zamek przy pustej kolejce
+		//utworzono proces i otwarto z niego zamek przy pustej kolejce
+		if (process->pid != 0)
 		{
 			//dodaj
 			OWNER_ID = process->pid;
@@ -19,7 +20,8 @@ void mutex::lock(std::shared_ptr<PCB>process)
 			WAITING_PCB.push_back(process);
 			std::cout << "lock: " << process->name << ": file has been locked.\n";
 		}
-		else//dodaj init
+		//dodaj init
+		else
 		{
 			OWNER_ID = process->pid;
 			WAITING_PCB.push_back(process);
@@ -43,20 +45,22 @@ void mutex::lock(std::shared_ptr<PCB>process)
 			}
 			else if (process->pid != OWNER_ID && !LOCKED)
 			{
-				if (WAITING_PCB.front()->name == "init")//usuwanie inita z poczatku kolejki
+				//usuwanie inita z poczatku kolejki
+				if (WAITING_PCB.front()->name == "init")
 				{
 					WAITING_PCB.pop_front();
 				}
 				//ustawia ID procesu-wlasciciela
 				OWNER_ID = process->pid;
-				//zamyka zamek
+				//zamyka
 				LOCKED = true;
 				WAITING_PCB.push_back(process);
 				std::cout << "lock: " << process->name << ": file has been locked.\n";
 			}
-			else //if(process->pid == OWNER_ID && !LOCKED)//if do wywalki
+			else
 			{
-				if (WAITING_PCB.empty())//start systemu
+				//start systemu
+				if (WAITING_PCB.empty())
 				{
 					PCB init;
 					std::shared_ptr<PCB>init_ptr = make_shared<PCB>(init);
@@ -65,6 +69,7 @@ void mutex::lock(std::shared_ptr<PCB>process)
 				}
 				else
 				{
+					//zamyka
 					if (WAITING_PCB.front()->name != "init")
 					{
 						LOCKED = true;
@@ -85,7 +90,7 @@ void mutex::unlock(std::shared_ptr<PCB>process)
 		std::cout << "unlock(): " << process->name << ": the process is not the lock's owner, cannot unlock.\n";
 	else if (!LOCKED) std::cout << "unlock(): " << process->name << ": the lock is open, cannot unlock.\n";
 	//jesli proces jest wlascicielem
-	else //if (LOCKED && process->pid == OWNER_ID)
+	else
 	{
 		//sprawdza stan kolejki i usuwa z niej wykonany proces 
 		if (!WAITING_PCB.empty())

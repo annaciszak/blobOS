@@ -14,7 +14,6 @@ typedef enum color {
 	lightGreen = 10,
 	lightAqua = 11
 };
-
 void set_color(int col);
 
 class Shell {
@@ -33,16 +32,17 @@ protected:
 	void exit();
 	void logo();
 
-
 	//procesy i proces
+
 	void cp();
 	void dp();
-	void show(); //pcb, pcblist, ram, pagefile, root
+	void show();		//pcb, pcblist, ram, pagefile, root, lock
 	void showpcb();
 	void showpcblist();
 	void showtree();
 	
-	//pami��
+	//pamięć
+
 	void showram();
 	void showpagefile();
 	void showpagetable();
@@ -51,6 +51,7 @@ protected:
 	void showpages();
 
 	//pliki i katalogi
+
 	void touch();
 	void open();
 	void close();
@@ -67,6 +68,7 @@ protected:
 	void showcatalogue();
 
 	//interpreter
+
 	void go();
 
 

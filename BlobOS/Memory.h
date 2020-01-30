@@ -1,9 +1,7 @@
 ﻿#pragma once
-
 #include <array>
 #include <queue>
 #include <map>
-
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -15,8 +13,10 @@
 /*Struktura z informacją o tym, czy dana strona znajduje się w RAM i jaką ramkę zajmuje. Wykorzystywana do tablicy stronic w PCB.*/
 class PageInfo {
 public:
-	int frame; //Numer ramki, którą zajmuje dana stronica
-	bool bit;  //Wartość mówiąca, czy stronica znajduje się w RAM
+	//Wartość mówiąca, czy stronica znajduje się w RAM
+	int frame;
+	//Wartość mówiąca, czy stronica znajduje się w RAM
+	bool bit;
 	PageInfo();
 	PageInfo(int frame, bool bit);
 };
@@ -31,7 +31,6 @@ public:
 class Memory{
 public:
 	Memory();
-	
 	/*---------RAM---------*/
 
 	//Zmienne
@@ -84,7 +83,7 @@ public:
 	/*Wyświetla cały RAM.*/
 	void show_ram();
 
-	/*---------Virtual---------*/
+	/*---------Virtual Memory---------*/
 
 	// Kolejka FIFO dla algorytmu wymiany stronnic
 	std::queue<int> FIFO;

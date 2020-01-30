@@ -15,18 +15,14 @@ extern Planist planist;
 extern Interpreter interpreter;
 
 inline void set_color(int col) {
-
 	HANDLE color = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(color, col);
 }
-
 
 Shell::Shell() {
 	status = true;
 	this->line.clear();
 	this->parsed.clear();
-
-	//Co� potem do proces�w
 	PTree.init(make_shared<PCB>(PCB()));
 	planist.add_process(PTree.init_proc);
 }
@@ -35,12 +31,9 @@ void Shell::boot() {
 	logo();
 	char logo;
 	logo = _getch();
-	while (logo != 13) {
+	while (logo != 13)
 		logo = _getch();
-	}
 	system("color 8");
-	//std::cout<<std::endl;
-	//std::cout << std::endl;
 	loop();
 }
 
@@ -57,7 +50,6 @@ void Shell::read_line() {
 }
 
 void Shell::parse() {
-
 	line = line + ' ';
 	std::string temp;
 	for (int i = 0; i < line.size(); i++) {
@@ -82,7 +74,6 @@ void Shell::loop() {
 		}
 		line.clear();
 		parsed.clear();
-
 	} while (status);
 }
 
@@ -122,8 +113,6 @@ void Shell::logo() {
 )EOF");
 	Sleep(timer);
 	system("cls");
-
-
 	printf(R"EOF(                                                                                                                                                                                                              
                                  ```...........``                                                                       
                              `..-------------------..`                                                                  
@@ -156,8 +145,8 @@ void Shell::logo() {
 
 )EOF");
 
-Sleep(timer);
-system("cls");
+	Sleep(timer);
+	system("cls");
 	printf(R"EOF(                                                                                                                                                                                                              
                                  ```...........``                                                                       
                              `..-------------------..`                                                                  
@@ -226,7 +215,7 @@ system("cls");
 
 	Sleep(timer);
 	system("cls");
-printf(R"EOF(                                                                                                                                                                                                              
+	printf(R"EOF(                                                                                                                                                                                                              
                                  ```...........``                                                                       
                              `..-------------------..`                                                                  
                          ``.---------------------------.``                        
@@ -298,7 +287,6 @@ void Shell::not_recognized() {
 	std::cout << parsed[0] << ": command not found" << std::endl;
 }
 
-//Tu chyba trzeba zaktualizować to wypisywanie <- Ania F do Ani C
 void Shell::help() {
 	set_color(white);
 	printf(R"EOF(
@@ -349,11 +337,12 @@ ENTER - interpret next line of code
 }
 
 void Shell::execute() {
-									 //procesy
+	//procesy
 	if (parsed[0] == "cp") { cp(); }
 	else if (parsed[0] == "dp") { dp(); }
 	else if (parsed[0] == "show") { show(); }
-	else if (parsed[0] == "touch") { touch(); } //pliki
+	//pliki
+	else if (parsed[0] == "touch") { touch(); }
 	else if (parsed[0] == "rm") { rm(); }
 	else if (parsed[0] == "copy") { copy(); }
 	else if (parsed[0] == "cat") { cat(); }
@@ -813,7 +802,6 @@ void Shell::fileinfo() {
 	}
 	else if (parsed.size() == 2) {
 		FM.file_info(parsed[1]);
-		//Tu też zaraz zrobię funkcję <- Ania F
 	}
 	else {
 		std::string temp = parsed[0] + ": " + "extra operand" + " \'" + parsed[1] + "\'";
@@ -823,7 +811,6 @@ void Shell::fileinfo() {
 
 void Shell::go() {
 	if (parsed.size() == 1) {
-		//std::cout << "go go go" << std::endl;
 		set_color(white);
 		interpreter.execute_line();
 	}
@@ -850,7 +837,6 @@ void Shell::editor(std::string filename){
 		
 	do{
 		znak = _getch();
-	
 		if((znak !=19) && (znak!=17)) {
 			if (znak == 8) {
 				if (tekst.size() > 0) {
@@ -889,15 +875,13 @@ void Shell::editor(std::string filename){
 	system("cls");
 }
 
-//dopisanie na koniec pliku
+//Dopisywanie na koniec pliku
 void Shell:: write() {
 	if (parsed.size() == 1) {
 		std::string exc = parsed[0] + ": " + "missing operand";
 		throw exc;
 	}
-	if (parsed.size() == 2 && parsed[1] == "--help") {
-		Help::write();
-	}
+	if (parsed.size() == 2 && parsed[1] == "--help") Help::write();
 	if (parsed.size() > 2) {
 		if (FM.find_file(parsed[1]) > -1) {
 			std::string temp;
